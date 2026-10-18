@@ -1,0 +1,185 @@
+{
+    "products": [
+        {
+            "id": "cleanser",
+            "name": "Uriage Xemose - face wash",
+            "time": [
+                "morning",
+                "evening"
+            ],
+            "order": 1,
+            "priority": 1,
+            "interval_days": null,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [],
+            "active": false
+        },
+        {
+            "id": "milk_toner",
+            "name": "Celimax - milk toner",
+            "time": [
+                "morning",
+                "evening"
+            ],
+            "order": 3,
+            "priority": 1,
+            "interval_days": null,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [],
+            "active": false
+        },
+        {
+            "id": "enzyme_powder",
+            "name": "Aravia - enzyme powder",
+            "time": [
+                "evening"
+            ],
+            "order": 2,
+            "priority": 2,
+            "interval_days": 30,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [
+                "retinol_serum",
+                "retinal_booster",
+                "medicube"
+            ],
+            "active": true
+        },
+        {
+            "id": "vitc_pads",
+            "name": "Needly - Vita C Glow Jelly Pad",
+            "time": [
+                "morning"
+            ],
+            "order": 4,
+            "priority": 3,
+            "interval_days": 3,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [],
+            "active": true
+        },
+        {
+            "id": "retinol_serum",
+            "name": "Celimax - Retinol Shot Tightening Serum",
+            "time": [
+                "evening"
+            ],
+            "order": 5,
+            "priority": 5,
+            "interval_days": 3,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [
+                "retinal_booster",
+                "enzyme_powder",
+                "medicube",
+                "noni_cream"
+            ],
+            "active": true,
+            "sandwich": {
+                "cream": "uriage_cream",
+                "wait_minutes": "10-15"
+            }
+        },
+        {
+            "id": "retinal_booster",
+            "name": "Celimax - The Vita-A Retinal Shot Tightening",
+            "time": [
+                "evening"
+            ],
+            "order": 5,
+            "priority": 4,
+            "interval_days": 3,
+            "in_use": false,
+            "standalone": true,
+            "incompatible": [
+                "retinol_serum",
+                "enzyme_powder",
+                "medicube"
+            ],
+            "active": true
+        },
+        {
+            "id": "medicube",
+            "name": "Medicube Age-R Booster",
+            "time": [
+                "evening"
+            ],
+            "order": 6,
+            "priority": 3,
+            "interval_days": 2,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [
+                "retinol_serum",
+                "retinal_booster",
+                "enzyme_powder"
+            ],
+            "active": true
+        },
+        {
+            "id": "noni_cream",
+            "name": "Celimax - Real Noni Energy Repair",
+            "time": [
+                "morning",
+                "evening"
+            ],
+            "order": 7,
+            "priority": 1,
+            "interval_days": null,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [
+                "retinol_serum"
+            ],
+            "active": false
+        },
+        {
+            "id": "uriage_cream",
+            "name": "Uriage Xemose - C8",
+            "time": [
+                "evening"
+            ],
+            "order": 7,
+            "priority": 1,
+            "interval_days": null,
+            "in_use": true,
+            "standalone": false,
+            "incompatible": [],
+            "active": false
+        },
+        {
+            "id": "eye_cream",
+            "name": "Celimax - Real Noni Ultimate Eye Cream",
+            "time": [
+                "morning",
+                "evening"
+            ],
+            "order": 8,
+            "priority": 1,
+            "interval_days": null,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [],
+            "active": false
+        },
+        {
+            "id": "spf",
+            "name": "d'Alba - UV Essentials",
+            "time": [
+                "morning"
+            ],
+            "order": 9,
+            "priority": 10,
+            "interval_days": null,
+            "in_use": true,
+            "standalone": true,
+            "incompatible": [],
+            "active": false
+        }
+    ]
+}
