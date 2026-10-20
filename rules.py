@@ -28,6 +28,35 @@ def last_used(records: list, product_id: str):
                 last = record["date"]
     return last
 
+
+def are_compatible(first: dict, second: dict) -> bool:
+    """Проверяет, можно ли два средства использовать в один приём."""
+    if second["id"] in first["incompatible"]:
+        return False
+    if first["id"] in second["incompatible"]:
+        return False
+    return True
+
+
+def resolve_conflicts(candidates: list) -> tuple:
+    """Убирает несовместимые средства: при конфликте остаётся то, у кого приоритет выше."""
+    by_priority = sorted(candidates, key=lambda p: p["priority"], reverse=True)
+    accepted = []
+    skipped = []
+    for product in by_priority:
+        conflict = None
+        for chosen in accepted:
+            if not are_compatible(product, chosen):
+                conflict = chosen
+                break
+        if conflict is None:
+            accepted.append(product)
+        else:
+            skipped.append((product, conflict))
+    accepted.sort(key=lambda p: p["order"])
+    return accepted, skipped
+
+
 def build_plan(products: list, records: list, today: date, time_of_day: str) -> list:
     """Собирает план на утро или вечер: подходящие средства по порядку нанесения."""
     plan = []
@@ -41,19 +70,18 @@ def build_plan(products: list, records: list, today: date, time_of_day: str) -> 
         last = last_used(records, product["id"])
         if is_due(product, last, today):
             plan.append(product)
-    plan.sort(key=lambda p: p["order"])
-    return plan 
-
+        return resolve_conflicts(plan)
+   
 
 if __name__ == "__main__":
-    today = date.today()
     products = load_products(Path.cwd() / "products.json")
     records = load_history(Path.cwd() / "history.json")
-
-    print(f"Сегодня {today}")
-    print("Утром:")
-    for product in build_plan(products, records, today, "morning"):
-        print(f"  {product['order']}. {product['name']}")
-    print("Вечером:")
-    for product in build_plan(products, records, today, "evening"):
-        print(f"  {product['order']}. {product['name']}")
+    for today in [date(2026, 10, 20), date(2026, 10, 22)]:
+        print(f"Сегодня {today}")
+        for time_of_day in ["morning", "evening"]:
+            accepted, skipped = build_plan(products, records, today, time_of_day)
+            print(f"{time_of_day}:")
+            for product in accepted:
+                print(f"  {product['order']}. {product['name']}")
+            for product, winner in skipped:
+                print(f"  Не сегодня: {product['name']} (нельзя вместе с {winner['name']})")
