@@ -28,11 +28,32 @@ def last_used(records: list, product_id: str):
                 last = record["date"]
     return last
 
+def build_plan(products: list, records: list, today: date, time_of_day: str) -> list:
+    """Собирает план на утро или вечер: подходящие средства по порядку нанесения."""
+    plan = []
+    for product in products:
+        if not product["in_use"]:
+            continue
+        if not product["standalone"]:
+            continue
+        if time_of_day not in product["time"]:
+            continue
+        last = last_used(records, product["id"])
+        if is_due(product, last, today):
+            plan.append(product)
+    plan.sort(key=lambda p: p["order"])
+    return plan 
+
+
 if __name__ == "__main__":
     today = date.today()
     products = load_products(Path.cwd() / "products.json")
     records = load_history(Path.cwd() / "history.json")
-    for product in products:
-        if product["in_use"]:
-            last = last_used(records, product["id"])
-            print(f"{product['name']}: последний раз {last}, сегодня можно: {is_due(product, last, today)}")
+
+    print(f"Сегодня {today}")
+    print("Утром:")
+    for product in build_plan(products, records, today, "morning"):
+        print(f"  {product['order']}. {product['name']}")
+    print("Вечером:")
+    for product in build_plan(products, records, today, "evening"):
+        print(f"  {product['order']}. {product['name']}")
