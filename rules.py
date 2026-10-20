@@ -29,6 +29,14 @@ def last_used(records: list, product_id: str):
     return last
 
 
+def find_product(products: list, product_id: str):
+    """Находит средство по id. Если такого нет, возвращает None."""
+    for product in products:
+        if product["id"] == product_id:
+            return product
+    return None
+
+
 def are_compatible(first: dict, second: dict) -> bool:
     """Проверяет, можно ли два средства использовать в один приём."""
     if second["id"] in first["incompatible"]:
@@ -70,8 +78,27 @@ def build_plan(products: list, records: list, today: date, time_of_day: str) -> 
         last = last_used(records, product["id"])
         if is_due(product, last, today):
             plan.append(product)
-        return resolve_conflicts(plan)
-   
+    return resolve_conflicts(plan)
+
+
+
+def expand_steps(plan: list, products: list) -> list:
+    """Превращает план в список шагов. Средство с сэндвичем даёт несколько шагов."""
+    steps = []
+    for product in plan:
+        if "sandwich" not in product:
+            steps.append(product["name"])
+            continue
+        cream = find_product(products, product["sandwich"]["cream"])
+        if cream is None:
+            steps.append(product["name"])
+            continue
+        wait = product["sandwich"]["wait_minutes"]
+        steps.append(cream["name"])
+        steps.append(f"подождать {wait} минут")
+        steps.append(product["name"])
+        steps.append(cream["name"])
+    return steps
 
 if __name__ == "__main__":
     products = load_products(Path.cwd() / "products.json")
@@ -81,7 +108,7 @@ if __name__ == "__main__":
         for time_of_day in ["morning", "evening"]:
             accepted, skipped = build_plan(products, records, today, time_of_day)
             print(f"{time_of_day}:")
-            for product in accepted:
-                print(f"  {product['order']}. {product['name']}")
+            for number, step in enumerate(expand_steps(accepted, products), start=1):
+                print(f"  {number}. {step}")
             for product, winner in skipped:
                 print(f"  Не сегодня: {product['name']} (нельзя вместе с {winner['name']})")
