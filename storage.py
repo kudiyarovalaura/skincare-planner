@@ -12,8 +12,17 @@ def load_products(path: Path) -> list:
     return data["products"]
 
 
-if __name__ == "__main__":
-    products = load_products(Path.cwd() / "products.json")
-    print(f"Загружено средств: {len(products)}")
-    for product in products:
-        print(product["name"])
+def load_history(path: Path) -> list:
+    """Загружает историю применений. Если файла нет, история пустая."""
+    if not path.exists():
+        return []
+    with open(path, "r", encoding='utf-8') as f:
+        data = json.load(f)
+    return data["records"]
+
+
+def save_history(path: Path, records: list) -> None:
+    """Сохраняет историю применений в JSON-файл."""
+    data = {"records": records}
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascil=False, indent=4)

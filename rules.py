@@ -1,4 +1,7 @@
 from datetime import date
+from pathlib import Path
+from storage import load_products, load_history
+
 def days_since(last_date: str, today: date) -> int:
     """Считает, сколько дней прошло с last_date до today."""
     last = date.fromisoformat(last_date)
@@ -16,11 +19,20 @@ def is_due(product: dict, last_date, today: date) -> bool:
     return days_since(last_date, today) >= interval
 
 
+def last_used(records: list, product_id: str):
+    """Находит дату последнего применения средства. Если не применялось, None."""
+    last = None
+    for record in records:
+        if record["product"] == product_id:
+            if last is None or record["date"] > last:
+                last = record["date"]
+    return last
+
 if __name__ == "__main__":
     today = date.today()
-    print(f"Сегодня: {today}")
-    print(days_since("2026-10-17", today))
-
-    retinol = {"interval_days": 3}
-    print(is_due(retinol, "2026-10-17", today))
-    print(is_due(retinol, "2026-10-19", today))
+    products = load_products(Path.cwd() / "products.json")
+    records = load_history(Path.cwd() / "history.json")
+    for product in products:
+        if product["in_use"]:
+            last = last_used(records, product["id"])
+            print(f"{product['name']}: последний раз {last}, сегодня можно: {is_due(product, last, today)}")
