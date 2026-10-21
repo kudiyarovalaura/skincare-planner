@@ -16,6 +16,8 @@ def is_due(product: dict, last_date, today: date) -> bool:
         return True
     if last_date is None:
         return True
+    if last_date == today.isoformat():
+        return True
     return days_since(last_date, today) >= interval
 
 
