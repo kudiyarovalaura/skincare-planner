@@ -33,6 +33,9 @@ def main() -> None:
     """Главное меню программы."""
     products = load_products(PRODUCTS_PATH)
     records = load_history(HISTORY_PATH)
+    if len(products) == 0:
+        print("Нет средств для плана. Проверьте products.json и запустите снова.")
+        return
     today = date.today()
     print(f"Сегодня {today}")
 
