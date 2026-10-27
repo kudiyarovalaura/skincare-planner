@@ -67,7 +67,7 @@ def resolve_conflicts(candidates: list) -> tuple:
     return accepted, skipped
 
 
-def build_plan(products: list, records: list, today: date, time_of_day: str) -> list:
+def build_plan(products: list, records: list, today: date, time_of_day: str) -> tuple:
     """Собирает план на утро или вечер: подходящие средства по порядку нанесения."""
     plan = []
     for product in products:

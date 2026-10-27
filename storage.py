@@ -31,4 +31,4 @@ def save_history(path: Path, records: list) -> None:
     """Сохраняет историю применений в JSON-файл."""
     data = {"records": records}
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascil=False, indent=4)
+        json.dump(data, f, ensure_ascii=False, indent=4)
